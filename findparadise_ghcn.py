@@ -1,4 +1,4 @@
-#!/usr/bin/env ipython3
+#!/usr/bin/env python3
 
 ##
 # @file
@@ -22,10 +22,9 @@ def split(line):
         values.append(int(line[offset:offset+5]))
         offset += 8
     values = np.array(values)
-    pdb.set_trace()
-    return values
+    return values, values.sum()
 
-def step1():
+def find_TSUN_monthlymean():
     fname = './ghcn/ghcnd_all/'+'FMW00040505.dly'
     # does file exist?
     if not os.path.isfile(fname):
@@ -34,28 +33,24 @@ def step1():
     # now we know that file exists
 
     # we open the file and read from it:
+    monthly_median_tsun = [] # [h] <= measured in units of hours
+    total_sunshine = 0 # [h]
     with open(fname , "r") as fi:
         for line in fi.readlines():
-            print(line[17:21])
-            continue
+            #print(line[17:21])
+            #continue
 
-            # does not execute
             if line[17:21] == 'TSUN':
-                print(line)
-                split(line)
-#            for k in range(len(id1)):
-#                if line[0:12] == id1[k]+' '+id2[k]:
-#                    print(line[:-1])
+                values, total = split(line) # [min]
+                total_sunshine += total/60 # [h]
 
-#    T = np.genfromtxt(fname, skiprows = 1, unpack = True, usecols=(3), dtype="d17")
-#    allT = np.hstack([allT, T])
-
-#    if len(allT) > 0:
-#        Tmax = (max(allT)-32)*5/9
-#        Tmin = (min(allT)-32)*5/9
-#        Tmedian = (np.median(allT)-32)*5/9
-
-#        print(station1, station2, pretty(Tmin), pretty(Tmax), pretty(Tmedian))
+                median_tsun = np.median(values)/60
+                #print(line[11:17]+" had a median sunshine duration of "+str(median_tsun)+" hours.")
+                monthly_median_tsun.append(median_tsun)
+    #print(monthly_median_tsun)
+    median_tsun = np.median(monthly_median_tsun[-12:])
+    print(fname+" has a "+str(pretty(median_tsun))+" hours of sunlight on a normal day in a normal month and a total of "+str(int(total_sunshine))+" hours in a year.")
+    print(total_sunshine/median_tsun/365.25)
 
 def step2():
     dat = 'minmaxmed.dat'
@@ -90,6 +85,6 @@ def step2():
     print(sum(sel), 'stations fulfill our criteria')
 
 
-
-step1() # for finding the min, max, median temperature over all history
-#step2() # for finding the stations with agreeable temperature range
+if __name__=="__main__":
+    find_TSUN_monthlymean()
+    #step2() # for finding the stations with agreeable temperature range

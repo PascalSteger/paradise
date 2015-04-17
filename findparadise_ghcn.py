@@ -26,13 +26,20 @@ def split(line):
     return values
 
 def step1():
-    fname = 'ghcnd_all/'+'FMW00040505.dly'
+    fname = './ghcn/ghcnd_all/'+'FMW00040505.dly'
+    # does file exist?
+    if not os.path.isfile(fname):
+        print("File "+fname+" does not exist!")
+        exit(1)
+    # now we know that file exists
 
-    #if not os.path.isfile(fname):
-    #    continue
+    # we open the file and read from it:
     with open(fname , "r") as fi:
         for line in fi.readlines():
-            #print(line[17:21])
+            print(line[17:21])
+            continue
+
+            # does not execute
             if line[17:21] == 'TSUN':
                 print(line)
                 split(line)

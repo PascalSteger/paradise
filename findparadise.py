@@ -1,4 +1,4 @@
-#!/usr/bin/env python3 
+#!/usr/bin/env python3
 
 ##
 # @file
@@ -41,7 +41,7 @@ def step1():
 
 def step2():
     dat = 'minmaxmed.dat'
-    id1,id2,Tmin,Tmax,Tmed = np.loadtxt(dat,usecols=(0,1,2,3,4), unpack=True, dtype=str)
+    id1,id2,Tmin,Tmax,Tmed = np.loadtxt(dat, usecols=(0,1,2,3,4), unpack=True, dtype=str)
 
     Tminn = np.zeros(len(id1), dtype=float)
     Tmaxn = np.zeros(len(id1), dtype=float)
